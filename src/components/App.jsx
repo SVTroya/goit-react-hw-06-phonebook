@@ -1,38 +1,31 @@
-import { ContactsList } from './App.styled';
-import { NewContactForm } from './NewContactForm/NewContactForm';
-import { ListOfContacts } from './ListOfContacts/ListOfContacts';
-import storage from '../utils/storage.js';
-import { useEffect, useState } from 'react';
+import { ContactsList } from './App.styled'
+import { NewContactForm } from './NewContactForm/NewContactForm'
+import { ListOfContacts } from './ListOfContacts/ListOfContacts'
+import storage from '../utils/storage.js'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setContacts } from '../redux/actions'
+import { getContacts } from '../redux/selectors'
 
 export function App() {
-  const [contacts, setContacts] = useState([]);
+  const contacts = useSelector(getContacts)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    const storageValue = storage.load(storage.KEY_CONTACTS);
-    setContacts(storageValue || []);
-  }, []);
+    const storageValue = storage.load(storage.KEY_CONTACTS)
+    if (storageValue && storageValue?.length > 0) {
+      dispatch(setContacts(storageValue))
+    }
+  }, [])
 
   useEffect(() => {
-    storage.save(storage.KEY_CONTACTS, contacts);
-  }, [contacts]);
-
-  function onSubmitForm(id, name, phone) {
-    setContacts(prev => [...prev, { id, name, phone }]);
-  }
-
-  function onRemoveContact(id) {
-    setContacts(prev => prev.filter(contactInfo => contactInfo.id !== id));
-  }
+    storage.save(storage.KEY_CONTACTS, contacts)
+  }, [contacts])
 
   return (
     <ContactsList>
-      <NewContactForm
-        contacts={contacts}
-        onSubmit={onSubmitForm}
-      />
-      <ListOfContacts
-        contacts={contacts}
-        onRemoveContact={onRemoveContact} />
+      <NewContactForm />
+      <ListOfContacts />
     </ContactsList>
-  );
+  )
 }

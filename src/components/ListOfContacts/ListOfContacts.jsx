@@ -1,35 +1,21 @@
-import { Contact } from '../Contact/Contact';
-import PropTypes from 'prop-types';
-import { HeaderContainer, ListWrapper } from './ListOfContacts.styled';
-import { Filter } from '../Filter/Filter';
-import { useState } from 'react';
+import { Contact } from '../Contact/Contact'
+import { HeaderContainer, ListWrapper } from './ListOfContacts.styled'
+import { Filter } from '../Filter/Filter'
+import { useDispatch, useSelector } from 'react-redux'
+import { getContacts, getFilterValue } from '../../redux/selectors'
+import { setFilterValue } from '../../redux/actions'
 
-ListOfContacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      phone: PropTypes.string,
-    }),
-  ),
-  onRemoveContact: PropTypes.func,
-};
-
-export function ListOfContacts({ contacts, onRemoveContact }) {
-
-  const [filterValue, setFilterValue] = useState('');
+export function ListOfContacts() {
+  const contacts = useSelector(getContacts)
+  const filterValue = useSelector(getFilterValue)
+  const dispatch = useDispatch()
 
   function onFilterInputChange(value) {
-    setFilterValue(value)
+    dispatch(setFilterValue(value))
   }
 
   function getContactsItems(contacts, filter) {
     return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()))
-      .map(contact => (
-        <li key={contact.id}>
-          <Contact contact={contact} onRemoveContact={onRemoveContact} />
-        </li>
-      ));
   }
 
   return (
@@ -37,8 +23,12 @@ export function ListOfContacts({ contacts, onRemoveContact }) {
       <HeaderContainer><h3>Contacts</h3>
         <Filter filter={filterValue} onChange={onFilterInputChange} /></HeaderContainer>
       <ul>
-        {getContactsItems(contacts, filterValue)}
+        {getContactsItems(contacts, filterValue).map(contact => (
+          <li key={contact.id}>
+            <Contact contact={contact} />
+          </li>
+        ))}
       </ul>
     </ListWrapper>
-  );
+  )
 }

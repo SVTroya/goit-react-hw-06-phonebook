@@ -1,37 +1,33 @@
-import { Form, FormWrapper } from './NewContactForm.styled';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { Form, FormWrapper } from './NewContactForm.styled'
+import { addContact } from '../../redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getContacts } from '../../redux/selectors'
 
-NewContactForm.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    phone: PropTypes.string,
-  })),
-  onSubmit: PropTypes.func,
-};
+export function NewContactForm() {
+  const contacts = useSelector(getContacts)
+  const dispatch = useDispatch()
 
-export function NewContactForm({ contacts, onSubmit }) {
-
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-
-  const nameInputId = crypto.randomUUID();
-  const phoneInputId = crypto.randomUUID();
+  const nameInputId = crypto.randomUUID()
+  const phoneInputId = crypto.randomUUID()
 
   function handleSubmit(ev) {
-    ev.preventDefault();
-    if (contacts.some(({ name: contactName }) => contactName === name)) {
-      alert(`${name} is already in contacts!`);
-      return;
+    ev.preventDefault()
+    const { name, phone } = ev.target.elements
+    if (contacts.some(({ name: contactName }) =>{
+      console.log(contactName)
+      console.log(name.value)
+      return contactName === name.value
+    })
+    ) {
+      alert(`${name.value} is already in contacts!`)
+      return
     }
-    onSubmit(crypto.randomUUID(), name, phone);
-    setName('');
-    setPhone('');
+    dispatch(addContact({ name: name.value, phone: phone.value }))
+    ev.target.reset()
   }
 
   function handleClick({ target }) {
-    target.blur();
+    target.blur()
   }
 
   return (
@@ -42,21 +38,17 @@ export function NewContactForm({ contacts, onSubmit }) {
           type='text'
           name='name'
           id={nameInputId}
-          value={name}
           placeholder='Enter name'
-          onChange={(ev) => setName(ev.target.value)}
           required />
         <label htmlFor={phoneInputId}>Phone number</label>
         <input
           type='tel'
           name='phone'
           id={phoneInputId}
-          value={phone}
           placeholder='Enter phone number'
-          onChange={(ev) => setPhone(ev.target.value)}
           required />
         <button type='submit' onClick={handleClick}>Add contact</button>
       </Form>
     </FormWrapper>
-  );
+  )
 }
