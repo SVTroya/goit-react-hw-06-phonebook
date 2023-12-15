@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import background from '../images/notebook.webp'
 
-export const ContactsList = styled.div`
+export const ContactsBookContainer = styled.div`
   width: 1153px;
   height: 783px;
   display: flex;

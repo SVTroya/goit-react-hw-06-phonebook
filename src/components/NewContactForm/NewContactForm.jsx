@@ -1,29 +1,27 @@
-import { Form, FormWrapper } from './NewContactForm.styled'
+import { ErrorMessage, Form, FormWrapper, InputWrapper } from './NewContactForm.styled'
 import { addContact } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getContacts } from '../../redux/selectors'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 export function NewContactForm() {
   const contacts = useSelector(getContacts)
   const dispatch = useDispatch()
 
-  const nameInputId = crypto.randomUUID()
-  const phoneInputId = crypto.randomUUID()
+  const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
-  function handleSubmit(ev) {
-    ev.preventDefault()
-    const { name, phone } = ev.target.elements
-    if (contacts.some(({ name: contactName }) =>{
-      console.log(contactName)
-      console.log(name.value)
-      return contactName === name.value
+  function onSubmit(data) {
+    const { nameInput, phoneInput } = data
+    if (contacts.some(({ name }) => {
+      return name === nameInput
     })
     ) {
-      alert(`${name.value} is already in contacts!`)
+      toast.warn(`${nameInput} is already in contacts!`)
       return
     }
-    dispatch(addContact({ name: name.value, phone: phone.value }))
-    ev.target.reset()
+    dispatch(addContact({ name: nameInput, phone: phoneInput }))
+    reset()
   }
 
   function handleClick({ target }) {
@@ -32,21 +30,28 @@ export function NewContactForm() {
 
   return (
     <FormWrapper>
-      <Form onSubmit={handleSubmit}>
-        <label htmlFor={nameInputId}>Name</label>
-        <input
-          type='text'
-          name='name'
-          id={nameInputId}
-          placeholder='Enter name'
-          required />
-        <label htmlFor={phoneInputId}>Phone number</label>
-        <input
-          type='tel'
-          name='phone'
-          id={phoneInputId}
-          placeholder='Enter phone number'
-          required />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <InputWrapper>
+          <span>Name</span>
+          <input
+            {...register('nameInput', {
+              required: 'Name is required!',
+              minLength: { value: 2, message: 'Name must be at least 2 symbols long!' }
+            })}
+            placeholder='Enter name' />
+          {errors.nameInput && <ErrorMessage>{errors.nameInput.message}</ErrorMessage>}
+        </InputWrapper>
+        <InputWrapper>
+          <span>Phone number</span>
+          <input
+            type='tel'
+            {...register('phoneInput', {
+              required: 'Phone number is required!',
+              minLength: { value: 9, message: 'Phone number is too short!' }
+            })}
+            placeholder='Enter phone number' />
+          {errors.phoneInput && <ErrorMessage>{errors.phoneInput.message}</ErrorMessage>}
+        </InputWrapper>
         <button type='submit' onClick={handleClick}>Add contact</button>
       </Form>
     </FormWrapper>

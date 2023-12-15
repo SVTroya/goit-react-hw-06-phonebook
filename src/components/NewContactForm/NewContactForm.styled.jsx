@@ -1,13 +1,12 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const FormWrapper = styled.section`
   width: 50%;
-`;
+`
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 8px;
   margin: 40px;
   padding: 20px 30px 30px;
   background-color: cornsilk;
@@ -17,27 +16,8 @@ export const Form = styled.form`
   box-shadow: inset 1px 1px 6px 3px #a8a190;
   color: #004242;
 
-  label {
-    font-size: 23px;
-    margin-top: 10px;
-  }
-
-  input {
-    width: 300px;
-    height: 30px;
-    border-radius: 8px;
-    border: none;
-    padding: 2px 10px;
-    box-shadow: 0 0 3px 1px #a8a190;
-    font-size: 20px;
-
-    &:hover, &:focus {
-      outline: none;
-    }
-  }
-
   button {
-    margin-top: 20px;
+    margin-top: 10px;
     width: fit-content;
     border-radius: 20px;
     border: none;
@@ -54,4 +34,40 @@ export const Form = styled.form`
       background-color: #005454;
     }
   }
-`;
+`
+
+export const InputWrapper = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 23px;
+  position: relative;
+  line-height: 1;
+  padding-bottom: 20px;
+
+  input {
+    margin-top: 2px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    padding: 2px 10px;
+    box-shadow: 0 0 3px 1px #a8a190;
+    font-size: 20px;
+
+    &:hover, &:focus {
+      outline: none;
+    }
+  }
+`
+
+export const ErrorMessage = styled.span`
+  margin-top: 3px;
+  font-size: 14px;
+  color: red;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 0.7;
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+`

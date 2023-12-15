@@ -1,4 +1,4 @@
-import { ContactsList } from './App.styled'
+import { ContactsBookContainer } from './App.styled'
 import { NewContactForm } from './NewContactForm/NewContactForm'
 import { ListOfContacts } from './ListOfContacts/ListOfContacts'
 import storage from '../utils/storage.js'
@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setContacts } from '../redux/actions'
 import { getContacts } from '../redux/selectors'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export function App() {
   const contacts = useSelector(getContacts)
@@ -23,9 +25,18 @@ export function App() {
   }, [contacts])
 
   return (
-    <ContactsList>
-      <NewContactForm />
-      <ListOfContacts />
-    </ContactsList>
+    <>
+      <ContactsBookContainer>
+        <NewContactForm />
+        <ListOfContacts />
+      </ContactsBookContainer>
+      <ToastContainer
+        position='top-center'
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick
+        theme='colored' />
+    </>
   )
 }
