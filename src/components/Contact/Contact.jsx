@@ -2,7 +2,7 @@ import { IconWrapper, Name, Phone } from './Contact.styled'
 import PropTypes from 'prop-types'
 import { ImBin } from 'react-icons/im'
 import { useDispatch } from 'react-redux'
-import { removeContact } from '../../redux/actions'
+import { removeContact } from '../../redux/contactsSlice'
 
 Contact.propTypes = {
   contact: PropTypes.shape({

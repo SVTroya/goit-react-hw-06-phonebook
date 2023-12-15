@@ -1,9 +1,9 @@
 import { ErrorMessage, Form, FormWrapper, InputWrapper } from './NewContactForm.styled'
-import { addContact } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getContacts } from '../../redux/selectors'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { addContact } from '../../redux/contactsSlice'
 
 export function NewContactForm() {
   const contacts = useSelector(getContacts)
