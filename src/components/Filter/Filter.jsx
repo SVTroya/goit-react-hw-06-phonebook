@@ -1,19 +1,19 @@
 import { FilterInputStyled } from './FilterInputStyled';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux'
+import { setFilterValue } from '../../redux/actions'
+import { getFilterValue } from '../../redux/selectors'
 
-export function Filter({ filter, onChange }) {
+export function Filter() {
+  const filterValue = useSelector(getFilterValue)
+  const dispatch = useDispatch()
+
   return (
     <FilterInputStyled
       type='text'
       name='filter'
       id={crypto.randomUUID()}
-      value={filter}
+      value={filterValue}
       placeholder='Find conacts by name'
-      onChange={({ target: { value } }) => onChange(value)} />
+      onChange={({ target }) => dispatch(setFilterValue(target.value))} />
   );
 }
-
-Filter.propTypes = {
-  filter: PropTypes.string,
-  onChange: PropTypes.func,
-};
