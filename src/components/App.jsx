@@ -16,7 +16,7 @@ export function App() {
     if (storageValue && storageValue?.length > 0) {
       dispatch(setContacts(storageValue))
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     storage.save(storage.KEY_CONTACTS, contacts)
